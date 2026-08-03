@@ -477,10 +477,6 @@ def delete():
         return Response(PAGE.format(body=f"<p>Delete failed: {e}</p>"), status=500)
     return redirect(f"/fm/?path={urllib.parse.quote(parent)}")
 
-application = DispatcherMiddleware(
-    Flask("empty"),
-    {"/fm": app},
-)
-
 if __name__ == "__main__":
-    run_simple("0.0.0.0", 9001, application, threaded=True)
+    wrapped = DispatcherMiddleware(Flask("empty"), {"/fm": app})
+    run_simple("0.0.0.0", 9001, threaded=True)
